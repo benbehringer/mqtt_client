@@ -103,11 +103,12 @@ class SubscriptionsManager {
   }
 
   /// Publish message received
-  void publishMessageReceived(MessageReceived event) {
-    final String topic = event.topic.rawTopic;
+  void publishMessageReceived(dynamic event) {
+    final String topic = (event as MessageReceived).topic.rawTopic;
     if (messagesReceived.containsKey(topic)) {
       final MqttReceivedMessage<MqttMessage> msg =
-      new MqttReceivedMessage<MqttMessage>(topic, event.message);
+      new MqttReceivedMessage<MqttMessage>(
+          topic, (event as MessageReceived).message);
       messagesReceived[topic].notifyChange(msg);
     }
   }
