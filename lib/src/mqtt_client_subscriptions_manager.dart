@@ -102,14 +102,16 @@ class SubscriptionsManager {
 
   /// Publish message received
   void publishMessageReceived(dynamic event) {
-    final topic = (event as MessageReceived).topic;
-    subscriptionNotifiers.forEach((subTopic, notifier) {
-      if (subTopic.matches(topic)) {
-        final msg = new MqttReceivedMessage<MqttMessage>(
-            topic.rawTopic, (event as MessageReceived).message);
-        notifier.notifyChange(msg);
-      }
-    });
+    if (event is MessageReceived) {
+      final topic = (event as MessageReceived).topic;
+      subscriptionNotifiers.forEach((subTopic, notifier) {
+        if (subTopic.matches(topic)) {
+          final msg = new MqttReceivedMessage<MqttMessage>(
+              topic.rawTopic, (event as MessageReceived).message);
+          notifier.notifyChange(msg);
+        }
+      });
+    }
   }
 
 

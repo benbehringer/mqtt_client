@@ -96,7 +96,7 @@
         <entry key="crypto">
           <value>
             <list>
-              <option value="$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-2.0.5/lib" />
+              <option value="$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-2.0.6/lib" />
             </list>
           </value>
         </entry>
@@ -145,7 +145,7 @@
         <entry key="event_bus">
           <value>
             <list>
-              <option value="$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/event_bus-1.0.0/lib" />
+              <option value="$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/event_bus-0.4.1/lib" />
             </list>
           </value>
         </entry>
@@ -571,14 +571,14 @@
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.10/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/convert-2.0.1/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/coverage-0.7.9/lib" />
-      <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-2.0.5/lib" />
+      <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-2.0.6/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/csslib-0.14.4/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/dart2_constant-1.0.1+dart2/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/dart_dev-1.9.4/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/dart_internal-0.1.1/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/dart_style-0.2.16/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/dartdoc-0.10.0/lib" />
-      <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/event_bus-1.0.0/lib" />
+      <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/event_bus-0.4.1/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/fluri-1.2.4/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/glob-1.1.6/lib" />
       <root url="file://$USER_HOME$/tools/flutter/.pub-cache/hosted/pub.dartlang.org/html-0.13.3+1/lib" />
