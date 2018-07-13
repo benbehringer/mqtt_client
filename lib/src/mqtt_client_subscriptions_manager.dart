@@ -27,8 +27,8 @@ class SubscriptionsManager {
 
   /// Observable change notifiers, indexed by subscription topic
   Map<SubscriptionTopic,
-      observe.ChangeNotifier<MqttReceivedMessage>> subscriptionNotifiers =
-  new Map<SubscriptionTopic, observe.ChangeNotifier<MqttReceivedMessage>>();
+      observe.ChangeNotifier<observe.ChangeRecord>> subscriptionNotifiers =
+  new Map<SubscriptionTopic, observe.ChangeNotifier<observe.ChangeRecord>>();
 
   ///  Creates a new instance of a SubscriptionsManager that uses the specified connection to manage subscriptions.
   SubscriptionsManager(IMqttConnectionHandler connectionHandler,
@@ -78,7 +78,7 @@ class SubscriptionsManager {
       messageIdentifierDispenser.getNextMessageIdentifier("subscriptions");
       // Create a new observable that is used to yield messages
       // that arrive for the topic.
-      final observe.ChangeNotifier<MqttReceivedMessage> observable =
+      final observe.ChangeNotifier<observe.ChangeRecord> observable =
       createObservableForSubscription(subscriptionTopic, msgId);
       final Subscription sub = new Subscription();
       sub.topic = subscriptionTopic;
@@ -101,22 +101,23 @@ class SubscriptionsManager {
   }
 
   /// Publish message received
-  void publishMessageReceived(MessageReceived event) {
-    final topic = event.topic;
+  void publishMessageReceived(dynamic event) {
+    final topic = (event as MessageReceived).topic;
     subscriptionNotifiers.forEach((subTopic, notifier) {
       if (subTopic.matches(topic)) {
         final msg = new MqttReceivedMessage<MqttMessage>(
-            topic.rawTopic, event.message);
+            topic.rawTopic, (event as MessageReceived).message);
         notifier.notifyChange(msg);
       }
     });
   }
 
+
   /// Creates an observable for a subscription.
-  observe.ChangeNotifier<MqttReceivedMessage> createObservableForSubscription(
+  observe.ChangeNotifier<observe.ChangeRecord> createObservableForSubscription(
       SubscriptionTopic subscriptionTopic, int msgId) {
-    final observe.ChangeNotifier<MqttReceivedMessage> cn =
-    new observe.ChangeNotifier<MqttReceivedMessage>();
+    final observe.ChangeNotifier<observe.ChangeRecord> cn =
+    new observe.ChangeNotifier<observe.ChangeRecord>();
     subscriptionNotifiers[subscriptionTopic] = cn;
     return cn;
   }

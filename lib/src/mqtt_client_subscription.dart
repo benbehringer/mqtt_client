@@ -22,5 +22,5 @@ class Subscription extends Object with observe.Observable {
   MqttQos qos;
 
   /// The observable that receives messages from the broker.
-  observe.ChangeNotifier<MqttReceivedMessage> observable;
+  observe.ChangeNotifier<observe.ChangeRecord> observable;
 }

@@ -49,8 +49,7 @@ class SynchronousMqttConnectionHandler extends MqttConnectionHandler {
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect - pre sleep, state = $connectionState");
       // We're the sync connection handler so we need to wait for the brokers acknowledgement of the connections
-      // Don't understand why we block here?!
-      // await MqttUtilities.asyncSleep(5);
+      await MqttUtilities.asyncSleep(1);
       
       MqttLogger.log(
           "SynchronousMqttConnectionHandler::internalConnect - post sleep, state = $connectionState");
