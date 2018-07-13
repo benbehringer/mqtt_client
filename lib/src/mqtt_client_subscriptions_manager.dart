@@ -42,7 +42,7 @@ class SubscriptionsManager {
         .connectionHandler
         .registerForMessage(MqttMessageType.unsubscribeAck, confirmUnsubscribe);
     // Start listening for published messages
-    clientEventBus.on().listen(publishMessageReceived);
+    clientEventBus.on(MessageReceived).listen(publishMessageReceived);
   }
 
   /// Registers a new subscription with the subscription manager.
