@@ -12,7 +12,7 @@ import 'package:observable/observable.dart';
 
 /// An annotated simple subscribe/publish usage example for mqtt_client. Please read in with reference
 /// to the MQTT specification. The example is runnable, also refer to test/mqtt_client_broker_test...dart
-/// files for separate subscribe/publish tests.
+/// files for separate subscribe/publish tests. This example shows the usage of wildcard subscriptions.
 Future<int> main() async {
   /// First create a client, the client is constructed with a broker name, client identifier
   /// and port if needed. The client identifier (short ClientId) is an identifier of each MQTT
@@ -22,7 +22,7 @@ Future<int> main() async {
   /// A condition is that clean session connect flag is true, otherwise the connection will be rejected.
   /// The client identifier can be a maximum length of 23 characters. If a port is not specified the standard port
   /// of 1883 is used.
-  /// If you want to use websockets rather than TCPO see below.
+  /// If you want to use websockets rather than TCP see below.
   final MqttClient client = new MqttClient("test.mosquitto.org", "");
 
   /// A websocket URL must start with ws:// or Dart will throw an exception, consult your websocket MQTT broker
@@ -75,19 +75,9 @@ Future<int> main() async {
   }
 
   /// Ok, lets try a subscription
-  final String topic = "test/hw"; // Not a wildcard topic
-  final ChangeNotifier<MqttReceivedMessage> cn = client
-      .subscribe(topic, MqttQos.exactlyOnce)
-      .observable;
-
-  /// Our known topic to publish to
-  final String pubTopic = "Dart/Mqtt_client/testtopic";
-
-  /// Subscribe to it
-  final ChangeNotifier<MqttReceivedMessage> cn1 =
-      client
-          .subscribe(pubTopic, MqttQos.exactlyOnce)
-          .observable;
+  final String topic = "test/#"; // Wildcard topic
+  final ChangeNotifier<MqttReceivedMessage> cn =
+      client.subscribe(topic, MqttQos.exactlyOnce).observable;
 
   /// We get a change notifier object(see the Observable class) which we then listen to to get
   /// notifications of published updates to each subscribed topic, one for each topic, these are
@@ -95,41 +85,19 @@ Future<int> main() async {
   cn.changes.listen((List<MqttReceivedMessage> c) {
     final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
     final String pt =
-    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+        MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
     /// The above may seem a little convoluted for users only interested in the
     /// payload, some users however may be interested in the received publish message,
     /// lets not constrain ourselves yet until the package has been in the wild
     /// for a while.
     /// The payload is a byte buffer, this will be specific to the topic
-    print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
-  });
-
-  /// Our topic
-  cn1.changes.listen((List<MqttReceivedMessage> c) {
-    final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
-    final String pt =
-    MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-
-    /// The above may seem a little convoluted for users only interested in the
-    /// payload, some users however may be interested in the received publish message,
-    /// lets not constrain ourselves yet until the package has been in the wild
-    /// for a while.
-    /// The payload is a byte buffer, this will be specific to the topic
-    print(
-        "EXAMPLE::Change notification for our topic:: payload is <$pt> for topic <$pubTopic>");
+    print("EXAMPLE::Change notification:: payload is <$pt> for topic <${c[0]
+        .topic}>");
   });
 
   /// Sleep to read the log.....
   await MqttUtilities.asyncSleep(5);
-
-  /// Lets publish to our topic, use a high QOS
-
-  // Use the payload builder rather than a raw buffer
-  print("EXAMPLE::Publishing our topic");
-  final MqttClientPayloadBuilder builder = new MqttClientPayloadBuilder();
-  builder.addString("Hello from mqtt_client");
-  client.publishMessage(pubTopic, MqttQos.exactlyOnce, builder.payload);
 
   /// Ok, we will now sleep a while, in this gap you will see ping request/response
   /// messages being exchanged by the keep alive mechanism.

@@ -78,15 +78,15 @@ class MqttClient {
   /// for the purposes of authentication.
   Future connect([String username, String password]) async {
     if (username != null) {
-      print(
+      MqttLogger.log(
           "Authenticating with username '{$username}' and password '{$password}'");
       if (username
           .trim()
           .length >
           Constants.recommendedMaxUsernamePasswordLength) {
-        print("Username length (${username
-                .trim()
-                .length}) exceeds the max recommended in the MQTT spec. ");
+        MqttLogger.log("Username length (${username
+            .trim()
+            .length}) exceeds the max recommended in the MQTT spec. ");
       }
     }
     if (password != null &&
@@ -94,9 +94,9 @@ class MqttClient {
             .trim()
             .length >
             Constants.recommendedMaxUsernamePasswordLength) {
-      print("Password length (${ password
-              .trim()
-              .length}) exceeds the max recommended in the MQTT spec. ");
+      MqttLogger.log("Password length (${ password
+          .trim()
+          .length}) exceeds the max recommended in the MQTT spec. ");
     }
     _connectionHandler = new SynchronousMqttConnectionHandler();
     if (useWebSocket) {
@@ -128,6 +128,8 @@ class MqttClient {
     if (connectionMessage == null) {
       connectionMessage = new MqttConnectMessage()
           .withClientIdentifier(clientIdentifier)
+      // Explicitly set the will flag
+          .withWillQos(MqttQos.atMostOnce)
           .keepAliveFor(Constants.defaultKeepAlive)
           .authenticateAs(username, password)
           .startClean();
@@ -138,11 +140,10 @@ class MqttClient {
   /// Initiates a topic subscription request to the connected broker with a strongly typed data processor callback.
   /// The topic to subscribe to.
   /// The qos level the message was published at.
-  /// Returns the change notifier assigned to the subscription.
+  /// Returns the subscription.
   /// Raises InvalidTopicException If a topic that does not meet the MQTT topic spec rules is provided.
-  observe.ChangeNotifier<MqttReceivedMessage> listenTo(String topic,
-      MqttQos qosLevel) {
-    if (_connectionHandler.connectionState != ConnectionState.connected) {
+  Subscription subscribe(String topic, MqttQos qosLevel) {
+    if (connectionState != ConnectionState.connected) {
       throw new ConnectionException(_connectionHandler.connectionState);
     }
     return _subscriptionsManager.registerSubscription(topic, qosLevel);
@@ -178,10 +179,10 @@ class MqttClient {
 
   /// Disconnect from the broker
   void disconnect() {
-    _connectionHandler.disconnect();
+    _connectionHandler?.disconnect();
     _publishingManager = null;
     _subscriptionsManager = null;
-    _keepAlive.stop();
+    _keepAlive?.stop();
     _keepAlive = null;
     _connectionHandler = null;
   }

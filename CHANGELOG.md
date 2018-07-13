@@ -1,3 +1,12 @@
+# 1.9.1
+Issue 22, don't disconnect if we have no connection established
+
+# 1.9.0
+Issue 19, multitopic subscriptions + other more minor updates, API changed on this version.
+
+# 1.8.0
+Pull request 14, Making library more compliant to work with VerneMQ - explicit setting of will qos.
+
 # 1.7.2
 Issue 10, add library prefix for observable
 
