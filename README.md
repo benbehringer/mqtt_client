@@ -38,7 +38,6 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:mqtt_client/mqtt_client.dart' as mqtt;
 import 'package:observable/observable.dart' as observe;
-//import 'package:observable/observable.dart';
 
 void main() => runApp(new MyApp());
 
@@ -64,9 +63,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final String broker = "iot.eclipse.org";
-  final String topic = "mqtt/test";
+  final String topic = "mqtt/flutter/test";
   final String id = new Uuid().v1().toString().substring(0,10);
-  String _mqttMessage;
+  String _mqttMessage = " ";
 
   void mqttTest() async {
     mqtt.MqttClient client = new mqtt.MqttClient(broker, id);
@@ -131,13 +130,26 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: new AppBar(
           title: new Text(widget.title),
         ),
-        body: new Center(
-            child: new Text("Message: $_mqttMessage")
-        ));
+        body:
+           new Column(
+             mainAxisAlignment: MainAxisAlignment.start,
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: <Widget>[
+              new Text("Broker: $broker", style: new TextStyle(fontSize: 11.0)),
+              new Text("Topic: $topic", style: new TextStyle(fontSize: 11.0)),
+              new Text(" "),
+              new Text("Publish: mosquitto_pub -h iot.eclipse.org -t mqtt/flutter/test -m \"publish this\"", style: new TextStyle(fontSize: 11.0)),
+              new Text(" "),
+              new Text("Received message:", style: new TextStyle(fontSize: 11.0)),
+              new Text(_mqttMessage, style: new TextStyle(fontWeight: FontWeight.bold)),
+            ],)
+        );
   }
 }
-
 ```
 
-
+test:
+```
+mosquitto_pub -h iot.eclipse.org -t mqtt/flutter/test -m "This is my message"
+```
 
