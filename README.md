@@ -55,7 +55,8 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'MQTT Demo'),);
+      home: new MyHomePage(title: 'MQTT Demo'),
+    );
   }
 }
 
@@ -70,7 +71,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final String broker = "iot.eclipse.org";
   final String topic = "mqtt/flutter/test";
-  final String id = new Uuid().v1().toString().substring(0,10);
+  final String id = new Uuid().v1().toString().substring(0, 10);
   String _mqttMessage = " ";
 
   void mqttTest() async {
@@ -80,9 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // Add the unsolicited disconnection callback
     client.onDisconnected = () => print("Disconnected!!!!");
 
-    final mqtt.MqttConnectMessage connMess = new mqtt.MqttConnectMessage()
-        .withClientIdentifier(id)
-        .keepAliveFor(30);
+    final mqtt.MqttConnectMessage connMess =
+        new mqtt.MqttConnectMessage().withClientIdentifier(id).keepAliveFor(30);
 
     client.connectionMessage = connMess;
 
@@ -104,26 +104,28 @@ class _MyHomePageState extends State<MyHomePage> {
       return;
     }
 
-    final observe.ChangeNotifier<observe.ChangeRecord> cn = client.subscribe(topic, mqtt.MqttQos.exactlyOnce).observable;
+    final observe.ChangeNotifier<observe.ChangeRecord> cn =
+        client.subscribe(topic, mqtt.MqttQos.exactlyOnce).observable;
     cn.changes.listen((List<observe.ChangeRecord> c) {
       mqtt.MqttReceivedMessage myMessage = c[0] as mqtt.MqttReceivedMessage;
-      final mqtt.MqttPublishMessage recMess = myMessage.payload as mqtt.MqttPublishMessage;
-      final String pt =
-      mqtt.MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-      print("EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
+      final mqtt.MqttPublishMessage recMess =
+          myMessage.payload as mqtt.MqttPublishMessage;
+      final String pt = mqtt.MqttPublishPayload
+          .bytesToStringAsString(recMess.payload.message);
+      print(
+          "EXAMPLE::Change notification:: payload is <$pt> for topic <$topic>");
       setState(() {
         _mqttMessage = pt;
       });
     });
 
-
     // Use the payload builder rather than a raw buffer
     final mqtt.MqttClientPayloadBuilder builder =
-    new mqtt.MqttClientPayloadBuilder();
-    builder.addString("This is the message our subscriber should receive once.");
+        new mqtt.MqttClientPayloadBuilder();
+    builder
+        .addString("This is the message our subscriber should receive once.");
     client.publishMessage(topic, mqtt.MqttQos.exactlyOnce, builder.payload);
   }
-
 
   @override
   void initState() {
@@ -136,20 +138,22 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: new AppBar(
           title: new Text(widget.title),
         ),
-        body:
-           new Column(
-             mainAxisAlignment: MainAxisAlignment.start,
-             crossAxisAlignment: CrossAxisAlignment.start,
-             children: <Widget>[
-              new Text("Broker: $broker", style: new TextStyle(fontSize: 11.0)),
-              new Text("Topic: $topic", style: new TextStyle(fontSize: 11.0)),
-              new Text(" "),
-              new Text("Publish: mosquitto_pub -h iot.eclipse.org -t mqtt/flutter/test -m \"publish this\"", style: new TextStyle(fontSize: 11.0)),
-              new Text(" "),
-              new Text("Received message:", style: new TextStyle(fontSize: 11.0)),
-              new Text(_mqttMessage, style: new TextStyle(fontWeight: FontWeight.bold)),
-            ],)
-        );
+        body: new Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            new Text("Broker: $broker", style: new TextStyle(fontSize: 11.0)),
+            new Text("Topic: $topic", style: new TextStyle(fontSize: 11.0)),
+            new Text(" "),
+            new Text(
+                "Publish: mosquitto_pub -h iot.eclipse.org -t mqtt/flutter/test -m \"publish this\"",
+                style: new TextStyle(fontSize: 11.0)),
+            new Text(" "),
+            new Text("Received message:", style: new TextStyle(fontSize: 11.0)),
+            new Text(_mqttMessage,
+                style: new TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ));
   }
 }
 ```
