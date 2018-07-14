@@ -24,6 +24,11 @@ mqtt_client:
     url: https://github.com/benbehringer/mqtt_client.git
 ```
 
+when using the example, remember to add uuid as a dependency (in pubspec.yaml):
+```
+uuid: "^1.0.1"
+```
+
 works with:
 ```
 Flutter 0.5.6 • channel dev • https://github.com/flutter/flutter.git
